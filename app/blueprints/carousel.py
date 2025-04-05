@@ -1,4 +1,5 @@
-from os import scandir, stat
+from os import scandir
+from datetime import datetime
 from os.path import join
 from time import time
 from random import sample
@@ -19,10 +20,16 @@ def carousel():
             for entry in scandir(join(current_app.config["IMG_DIR"],parent.name)):
                 files.append({
                     "name":parent.name,
-                    "url":url_for("image.image_file2",folder=parent.name,filename=entry.name,_external=True)
+                    "url":url_for("image.image_file",folder=parent.name,filename=entry.name,_external=True)
                 })
+    
+    if count > len(files):
+        return jsonify({
+            "error": f"Not enough images. (expected {count}, got {len(files)})",
+            "resolution": "Reduce count or add more images."
+        })
     return jsonify({
         "version": current_app.config["VERSION"],
         "images": sample(files, count),
-        "requested": time(),
+        "requested": datetime.fromtimestamp(time()).strftime("%I:%M %p"),
     })

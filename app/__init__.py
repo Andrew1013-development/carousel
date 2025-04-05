@@ -7,7 +7,7 @@ def create_app():
 
     app = Flask(__name__)
     app.config["IMG_DIR"] = environ["IMG_DIR"]
-    app.config["VERSION"] = "v0.2.2"
+    app.config["VERSION"] = "v0.2.3"
 
     from .blueprints import carouselpage, imagepage, homepage
     app.register_blueprint(carouselpage)
