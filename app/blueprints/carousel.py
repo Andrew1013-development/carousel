@@ -1,10 +1,15 @@
-from os import scandir
+from os import scandir, walk
 from datetime import datetime
 from os.path import join
 from time import time
 from random import sample
 from flask import current_app, request, jsonify, url_for
 from . import carouselpage
+
+# attempts to curb hidden files detection
+def image_check(filename):
+    valid_extensions = (".jpg", ".jpeg", ".png")
+    return filename.endswith(valid_extensions)
 
 @carouselpage.route("/")
 def carousel():
@@ -18,11 +23,11 @@ def carousel():
     for parent in scandir(current_app.config["IMG_DIR"]):
         if parent.is_dir():
             for entry in scandir(join(current_app.config["IMG_DIR"],parent.name)):
-                files.append({
-                    "name":parent.name,
-                    "url":url_for("image.image_file",folder=parent.name,filename=entry.name,_external=True)
-                })
-    
+                if image_check(entry.name):
+                    files.append({
+                        "name":parent.name,
+                        "url":url_for("image.image_file",folder=parent.name,filename=entry.name,_external=True)
+                    })
     if count > len(files):
         return jsonify({
             "error": f"Not enough images. (expected {count}, got {len(files)})",

@@ -1,4 +1,4 @@
-name: Build and Publish Docker image
+name: Development builds
 on:
   push:
     branches:
@@ -13,8 +13,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build Docker image
-      run: docker build . --file Dockerfile --tag andrew1013/carousel:latest
+      run: docker build . --file Dockerfile --tag andrew1013/carousel:dev
     - name: Publish Docker image
       run: |
         docker login -u andrew1013 -p ${{ secrets.DOCKER_TOKEN }}
-        docker push andrew1013/carousel:latest
+        docker push andrew1013/carousel:dev
