@@ -1,4 +1,4 @@
-name: Build Docker Images
+name: Build and Publish Docker image
 on:
   [workflow_dispatch]
 jobs:
@@ -6,5 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag carousel:latest
+    - name: Build Docker image
+      run: docker build . --file Dockerfile --tag andrew1013/carousel:latest
+    - name: Publish Docker image
+      run: |
+        docker login -u andrew1013 -p ${{ secrets.DOCKER_TOKEN }}
+        docker push andrew1013/carousel:latest
