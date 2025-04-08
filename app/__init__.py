@@ -6,9 +6,10 @@ def create_app():
     app.config.from_file("config.json", load=json_load)
     app.config["VERSION"] = "v0.2.4"
 
-    from .blueprints import carouselpage, imagepage, homepage
+    from .blueprints import carouselpage, imagepage, homepage, healthpage
     app.register_blueprint(carouselpage)
     app.register_blueprint(imagepage)
     app.register_blueprint(homepage)
+    app.register_blueprint(healthpage)
 
     return app
