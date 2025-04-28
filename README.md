@@ -9,7 +9,7 @@ Their official installation instructions can be found [here](https://github.com/
 You should have these files and folders in the directory you plan to install Carousel in:
 - Image folder, contained in separate folders with their respective names
 - Configuration file `config.json`
-- (optional) Logs folder (Carousel will write logs to this folders)
+- (optional) Logs folder (Carousel will write logs to this folder)
 ### Step 2: Configuration
 Paste the provided template below into your `config.json`:
 ```json
@@ -44,6 +44,7 @@ carousel:
 ```
 Modify any values deemed necessary as laid out in the comments.
 ### Step 4: Widget Setup
+Paste this into your Glance instance's `glance.yml` file, under the property `widgets`:
 ```yaml
 - type: custom-api
   title: Image Carousel (Experimental)
@@ -86,7 +87,7 @@ Available settings:
 ## Building from source
 Dockerfile
 ```dockerfile
-FROM python:3.13.1
+FROM python:3.13.3-slim
 
 WORKDIR /app
 COPY /app/blueprints/ blueprints/

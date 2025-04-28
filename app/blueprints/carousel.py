@@ -7,11 +7,24 @@ from flask import current_app as ca, request, jsonify, url_for
 from . import carouselpage
 
 # attempts to curb hidden files detection
-def image_check(filename: str) -> bool:
-    valid_extensions = (".jpg", ".jpeg", ".png")
-    return filename.endswith(valid_extensions)
+def image_check(filepath: str) -> bool:
+    # magic numbers sourced from https://en.wikipedia.org/wiki/List_of_file_signatures
+    magic_numbers = {
+        ".png": bytes([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]),
+        ".jpg": bytes([0xFF, 0xD8, 0xFF]), # omitted 4th byte and beyond
+        ".bmp": bytes([0x42, 0x4D]),
+        ".gif": bytes([0x47, 0x49, 0x46]),
+        ".webp": bytes([0x52, 0x49, 0x46, 0x46]), # only used first 4 bytes
+    }
+    f = open(filepath, "rb") 
+    file_id = f.read(8) # read first 8 bytes
+    f.close()
+    for extension in magic_numbers:
+        if file_id.startswith(magic_numbers[extension]):
+            return True
+    return False
 
-def image_pick(files: list[dict[str,any]], t: int, count: int) -> list[dict[str,any]]:
+def image_pick(files: list[dict[str,str]], t: int, count: int) -> list[dict[str,str]] | None:
     match t:
         case 1:
             # sequential sample
@@ -34,7 +47,7 @@ def carousel():
     for par in scandir(ca.config["IMG_DIR"]):
         if par.is_dir():
             for ent in scandir(join(ca.config["IMG_DIR"],par.name)):
-                if image_check(ent.name):
+                if image_check(ent.path):
                     files.append({
                         "name":par.name,
                         "url":url_for("image.image_file",folder=par.name,filename=ent.name,_external=True)

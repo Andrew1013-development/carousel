@@ -1,6 +1,6 @@
 {
     "IMG_DIR": "E:\\carousel\\images",
     "LOG_DIR": "E:\\carousel\\logs",
-    "MODE": 1,
+    "MODE": 2,
     "DEBUG": true
 }

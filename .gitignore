@@ -1,3 +1,8 @@
 images/*
+logs/*
+temp
 __pycache__
 app/.env
+docker-compose.yml
+config.json
+docker_config.json
